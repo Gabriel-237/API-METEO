@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#eef7f6">
+    <meta
+      name="description"
+      content="Consulte as condições do tempo e a previsão para cidades do mundo todo."
+    >
+    <title>METEO — Monitoramento meteorológico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="METEO, início">
+        <span class="brand-mark" aria-hidden="true">◉</span>
+        <span>METEO <span class="brand-divider">/</span> PAINEL</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="#inicio">Clima</a>
+        <a href="#previsao">Previsão</a>
+        <a href="#comparacao">Comparação</a>
+        <a href="#arquitetura">Arquitetura</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero section-wrap" id="inicio">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot"></span> DADOS DO TEMPO · EM TEMPO REAL</p>
+          <h1>Monitoramento<br>meteorológico</h1>
+          <p class="hero-description">
+            Descubra as condições atuais e acompanhe a previsão dos próximos cinco dias
+            para cidades do mundo todo.
+          </p>
+        </div>
+
+        <form class="search-card" id="search-form" novalidate>
+          <label for="city-input">Qual cidade você quer consultar?</label>
+          <div class="search-row">
+            <input
+              id="city-input"
+              name="city"
+              type="search"
+              placeholder="Digite o nome de uma cidade"
+              autocomplete="off"
+              minlength="2"
+              maxlength="100"
+              required
+            >
+            <button class="button button-primary" type="submit">Consultar</button>
+          </div>
+          <p class="field-hint">Experimente Salvador, Recife ou uma cidade de outro país.</p>
+          <p class="search-status" id="search-status" role="status" aria-live="polite"></p>
+          <div class="location-picker" id="location-picker" hidden>
+            <label for="location-select">Escolha a localidade correta</label>
+            <div class="search-row">
+              <select id="location-select" aria-label="Escolha a localidade correta"></select>
+              <button class="button button-primary" id="weather-submit" type="button">Ver clima</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="weather-section section-wrap" aria-label="Resultado meteorológico">
+        <div class="weather-content" id="weather-content" aria-live="polite" aria-busy="true">
+          <div class="loading-state">
+            <span class="loading-spinner" aria-hidden="true"></span>
+            <p>Consultando as condições meteorológicas…</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid section-wrap">
+        <section class="panel recent-panel" aria-labelledby="recent-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">SEU HISTÓRICO</p>
+              <h2 id="recent-title">Consultas recentes</h2>
+            </div>
+            <span class="heading-icon" aria-hidden="true">↗</span>
+          </div>
+          <p class="section-description">As últimas cinco cidades desta sessão.</p>
+          <ul class="recent-list" id="recent-list">
+            <li class="empty-message">Nenhuma cidade consultada ainda.</li>
+          </ul>
+        </section>
+
+        <section class="panel comparison-panel" id="comparacao" aria-labelledby="comparison-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">LADO A LADO</p>
+              <h2 id="comparison-title">Compare duas cidades</h2>
+            </div>
+            <span class="heading-icon" aria-hidden="true">⇄</span>
+          </div>
+          <p class="section-description">
+            Consulte cidades e compare as temperaturas máximas e mínimas da previsão.
+          </p>
+          <div class="comparison-selects">
+            <div class="field-group">
+              <label for="compare-first">Primeira cidade</label>
+              <select id="compare-first" disabled><option value="">Selecione uma cidade</option></select>
+            </div>
+            <div class="field-group">
+              <label for="compare-second">Segunda cidade</label>
+              <select id="compare-second" disabled><option value="">Selecione uma cidade</option></select>
+            </div>
+          </div>
+          <div class="comparison-result" id="comparison-result" aria-live="polite">
+            <p class="empty-message">Consulte pelo menos duas cidades para comparar.</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel forecast-panel section-wrap" id="previsao" aria-labelledby="forecast-title">
+        <div class="panel-heading forecast-heading">
+          <div>
+            <p class="eyebrow">OLHANDO PARA FRENTE</p>
+            <h2 id="forecast-title">Previsão para os próximos dias</h2>
+            <p class="section-description" id="forecast-caption">A previsão de cinco dias aparecerá após a consulta.</p>
+          </div>
+          <span class="heading-icon forecast-icon" aria-hidden="true">⌁</span>
+        </div>
+        <div class="forecast-chart" id="forecast-chart"></div>
+        <div class="forecast-days" id="forecast-days">
+          <p class="empty-message">Aguardando dados meteorológicos.</p>
+        </div>
+      </section>
+
+      <section class="architecture-section section-wrap" id="arquitetura" aria-labelledby="architecture-title">
+        <div class="architecture-intro">
+          <p class="eyebrow">SOBRE OS DADOS</p>
+          <h2 id="architecture-title">Simples, aberto e atualizado.</h2>
+          <p>
+            A busca encontra a cidade; as coordenadas selecionadas são usadas para consultar
+            o clima. Sem chave de API — dados fornecidos pela Open-Meteo.
+          </p>
+        </div>
+        <div class="architecture-flow" aria-label="Fluxo das consultas meteorológicas">
+          <div class="flow-step"><span>01</span><strong>Você pesquisa</strong><small>Nome da cidade</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step"><span>02</span><strong>Encontramos o local</strong><small>Geocoding · Open-Meteo</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step"><span>03</span><strong>Mostramos o clima</strong><small>Previsão · Open-Meteo</small></div>
+        </div>
+        <p class="architecture-note">
+          Esta versão consulta a Open-Meteo diretamente pelo navegador. Em produção, um API Gateway
+          e microsserviços podem centralizar e proteger as consultas.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer section-wrap">
+      <a class="brand footer-brand" href="#inicio"><span class="brand-mark" aria-hidden="true">◉</span> METEO</a>
+      <span>Informações meteorológicas para planejar o seu dia.</span>
+      <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Dados: Open-Meteo ↗</a>
+    </footer>
+  </body>
+</html>
